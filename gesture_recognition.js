@@ -15,18 +15,10 @@ async function train() {
   dataset.ys = null;
   dataset.encodeLabels(5);
     
-  // In the space below create a neural network that can classify hand gestures
-  // corresponding to rock, paper, scissors, lizard, and spock. The first layer
-  // of your network should be a flatten layer that takes as input the output
-  // from the pre-trained MobileNet model. Since we have 5 classes, your output
-  // layer should have 5 units and a softmax activation function. You are free
-  // to use as many hidden layers and neurons as you like.  
-  // HINT: Take a look at the Rock-Paper-Scissors example. We also suggest
-  // using ReLu activation functions where applicable.
   model = tf.sequential({
     layers: [
         
-        // The slice() method returns a shallow copy of a portion of an array into a new array object selected from start to end (end not included) where start and end represent the index of items in that array. The original array will not be modified.
+
         tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
         tf.layers.dense({units: 100, activation: 'relu'}),
         tf.layers.dense({units: 5, activation: 'softmax'})
@@ -34,13 +26,9 @@ async function train() {
     ]
   });
     
-   
-  // Set the optimizer to be tf.train.adam() with a learning rate of 0.0001.
   const optimizer = tf.train.adam(0.0001);
     
-        
-  // Compile the model using the categoricalCrossentropy loss, and
-  // the optimizer you defined above.
+      
   model.compile({optimizer: optimizer, loss: 'categoricalCrossentropy'});
  
   let loss = 0;
@@ -48,7 +36,7 @@ async function train() {
     epochs: 10,
     callbacks: {
       onBatchEnd: async (batch, logs) => {
-        loss = logs.loss.toFixed(5); // 5 decimal places
+        loss = logs.loss.toFixed(5);
         console.log('LOSS: ' + loss);
         }
       }
@@ -75,8 +63,6 @@ function handleButton(elem){
 			document.getElementById("spocksamples").innerText = "Spock samples:" + spockSamples;
 			break;
             
-        // Add a case for lizard samples.
-        // HINT: Look at the previous cases.
             
         case "4":
             lizardSamples++;
@@ -115,10 +101,6 @@ async function predict() {
 		case 3:
 			predictionText = "I see Spock";
 			break;
-            
-        // Add a case for lizard samples.
-        // HINT: Look at the previous cases.
-            
         case 4:
             predictionText = "I see Lizard";
             break;
